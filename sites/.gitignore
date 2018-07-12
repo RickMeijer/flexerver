@@ -1,0 +1,4 @@
+# filter everything in this dir
+*
+# except for this file so we still have ./sites in the directory
+!.gitignore
