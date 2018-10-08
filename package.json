@@ -9,14 +9,9 @@
   },
   "author": "Rick Meijer",
   "license": "ISC",
-  "devDependencies": {
-    "express": "^4.16.2",
-    "ngrok": "^3.0.1",
-    "nodemon": "^1.15.1"
-  },
   "dependencies": {
+    "express": "^4.16.2",
     "fs": "0.0.1-security",
-    "inquirer": "^6.0.0",
     "path": "^0.12.7"
   }
 }

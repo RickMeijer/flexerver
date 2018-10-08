@@ -1,41 +1,26 @@
-const { lstatSync, readdirSync } = require('fs')
-const { join } = require('path')
+const { lstatSync } = require('fs');
+const { join } = require('path');
 const express = require('express');
-const inquirer = require('inquirer');
 
 const app = express();
 let server;
 
-const blacklistedDirs = ['node_modules']
-const isDirectory = source => lstatSync(source).isDirectory()
-const isSymLink = (source) => lstatSync(source).isSymbolicLink()
-
-const getDirectories = source =>
-  readdirSync(source).map(name => join(source, name))
-  	.filter(d => (isDirectory(d) || isSymLink(d)))
-  	.filter(d => !blacklistedDirs.includes(d))
-
+const isDirectory = source => lstatSync(source).isDirectory();
 
 process.on('SIGINT', () => {
-    console.log("Caught interrupt signal, closing server");
-    server.close();
-    process.exit();
+  server.close();
+  process.exit('🔥 Killed it with fire');
 });
 
-const directory = inquirer.prompt({
-	type: 'list',
-	name: 'dir',
-	message: 'Select the directory or symlink that points to the static site.',
-	choices: [{name: '× Cancel', value: false}, new inquirer.Separator(), ...getDirectories('./sites')],
-	default: 0,
-}).then(runServer);
+process.on('exit', msg => {
+  console.log(msg);
+});
 
-function runServer(choice) {
-	const dir = choice.dir;
-	if(!dir) process.exit();
+const givenDir = process.argv[2] || '.';
+const dir = join(process.cwd(), givenDir);
+if (!isDirectory(dir)) process.exit(`🤷‍♂️ ${dir} is not a valid directory`);
 
-	app.use(express.static(dir))
-	server = app.listen(1337, () => {
-		console.log(`NSA is opening ${__dirname}/${dir} on localhost:1337`);
-	});
-}
+app.use(express.static(dir));
+server = app.listen(1337, () => {
+  console.log(`🤖 Opening ${dir} on localhost:1337`);
+});
