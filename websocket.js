@@ -21,7 +21,7 @@ function heartbeat() {
   this.isAlive = true;
 }
 
-function getTimeoutDelay() {
+function randomTimeoutDelay() {
   return Math.floor(Math.random() * 40) * 100;
 }
 
